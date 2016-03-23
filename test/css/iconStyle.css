@@ -1,0 +1,27 @@
+.icon-control{
+    display: inline-block;
+    width: 20px;
+    vertical-align: middle;
+}
+
+.file-right-icon{
+    margin-bottom: 2px;
+    display: inline-block;
+    width: 22px;
+}
+
+.set-icon{
+    width: 36px;
+}
+
+.refresh-icon{
+    width: 24px;
+}
+
+.file-icon{
+    width: 22px;
+}
+
+.file-down-icon{
+
+}

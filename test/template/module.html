@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件模型</title>
+    <link rel="stylesheet" href="../css/IDEStyle.css">
+    <link rel="stylesheet" href="../css/iconStyle.css">
+</head>
+<body>
+    <!--右键菜单组件-->
+    <div class="r-menu-box">
+        <div class="r-menu-body">
+            <ul class="r-menu-ul">
+                <li class="r-menu-li">
+                    <a href="javascript:" class="r-menu-a">新建</a>
+                </li>
+                <li class="r-menu-li">
+                    <a href="javascript:" class="r-menu-a">新建</a>
+                </li>
+                <li class="r-menu-li-separate"></li>
+                <li class="r-menu-li">
+                    <a href="javascript:" class="r-menu-a">删除<i class="r-menu-next-icon"></i></a>
+                    <div class="r-menu-box">
+                        <div class="r-menu-body">
+                            <ul class="r-menu-ul">
+                                <li class="r-menu-li">
+                                    <a href="javascript:" class="r-menu-a">新建</a>
+                                </li>
+                                <li class="r-menu-li">
+                                    <a href="javascript:" class="r-menu-a">新建</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="aaaaa" style="width:100px; height: 100px;background-color: #000000"></div>
+    <div id="bbbb" style="width:100px; height: 100px;background-color: #e5e5e5"></div>
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/controller.js"></script>
+<script>
+    var funTrGet = function(){
+        return $("#bbbb");
+    };
+    var objDelete = {
+        text: "删除",
+        func: function() {
+            funTrGet().remove();
+        }
+    }, objRubbish = {
+        text: "这是垃圾邮件",
+        func: function() {
+            funTrGet().hide();
+        }
+    }, objRead = {
+        text: "标记为已读",
+        func: function() {
+            funTrGet().css("font-weight", "400");
+        }
+    }, objUnRead = {
+        text: "标记为未读",
+        func: function() {
+            funTrGet().css("font-weight", "700");
+        }
+    }, objSend = {
+        text: "移动到",
+        data: [
+            [{
+                text: "收件箱",
+                func: function() {
+                    funTrGet().hide();
+                }
+            }, {
+                text: "已发送",
+                func: function() {
+                    funTrGet().hide();
+                }
+            }, {
+                text: "QQ邮箱订阅",
+                func: function() {
+                    funTrGet().hide();
+                }
+            }], [{
+                text: "新建文件夹",
+                func: function() {
+                    alert("模拟不了，弹出个框框意思下");
+                }
+            }]
+        ]
+    };
+    var mailMenuData = [
+        [objDelete, objRubbish,objRead,objUnRead,objSend]
+    ];
+
+    $("#aaaaa").rClickMenu(mailMenuData, {
+        name: "mail"
+    });
+</script>
+</body>
+</html>

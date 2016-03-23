@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件目录树测试</title>
+    <link rel="stylesheet" type="text/css" href="../css/iconStyle.css">
+    <link rel="stylesheet" type="text/css" href="../css/IDEStyle.css">
+</head>
+<body>
+<div class="tree-view">
+    <!--一级目录-->
+    <div class="tree-view-node file-open">
+        <img class="file-icon" src="../img/icon/fileDown.png"/>
+        <span class="tree-font">Naive</span>
+    </div>
+    <!--二级目录-->
+    <span class="">
+        <div class="tree-view-children">
+            <div class="tree-view-node">
+                <img class="file-icon" src="../img/icon/file.png"/>
+                <span class="tree-font">Too young</span>
+            </div>
+            <div class="tree-view-node file-open">
+                <img class="file-icon" src="../img/icon/fileDown.png"/>
+                <span class="tree-font">HaHa</span>
+            </div>
+            <!--三级目录-->
+            <span class="">
+                <div class="tree-view-children">
+                    <div class="tree-view-leaf">
+                        <img class="file-icon" src="../img/icon/doc.png"/>
+                        <span class="tree-font">Gua.php</span>
+                    </div>
+                </div>
+            </span>
+            <div class="tree-view-leaf">
+                <img class="file-icon" src="../img/icon/doc.png"/>
+                <span class="tree-font">Gua.php</span>
+            </div>
+        </div>
+    </span>
+
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <!--<script type="text/javascript" src="../js/controller.js"></script>-->
+    <script>
+
+    </script>
+</div>
+</body>
+</html>

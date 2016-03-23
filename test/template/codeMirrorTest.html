@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>代码编辑测试</title>
+        <link rel="stylesheet" href="../css/codemirror.css">
+        <link rel="stylesheet" href="../css/codeTheme/3024-day.css">
+        <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="../js/codemirror.js"></script>
+        <script type="text/javascript" src="../js/codeMode/javascript/javascript.js"></script>
+        <script type="text/javascript" src="../js/codeMode/jsx/jsx.js"></script>
+        <style>
+            .codeArea{
+                width: 800px;
+                height: 500px;
+                border-top: 1px solid black;
+                border-bottom: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <textarea id="codeM" class="codeArea"></textarea>
+        <!--<textarea id="code2" class="hide"></textarea>-->
+        <button id="aaaaa">testAdd</button>
+
+        <script>
+            ;(function(){
+                //调用codemirror的代码
+                var codeId = document.getElementById("codeM");
+                var editor = CodeMirror.fromTextArea(codeId,
+                        {lineNumbers: true,//是否显示行号
+                            mode: "jsx",//默认脚本编码
+                            lineWrapping: false//是否强制换行
+                        });
+                //设置界面风格（主题）
+                editor.setOption("theme",'3024-day');
+                var text = codeId.value;
+                editor.setValue(text);
+
+                if($("div").hasClass("CodeMirror-sizer")){
+                    $(".CodeMirror-sizer").css({"font-family":"Arial"});
+                }
+
+                $("#aaaaa").click(function(){
+                    text += "aaaaaaa";
+                    codeId.html += text;
+                    console.log(text);
+                    return false;
+                });
+            })();
+        </script>
+    </body>
+</html>

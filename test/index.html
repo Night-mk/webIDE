@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webIDE</title>
+    <link rel="stylesheet" type="text/css" href="css/iconStyle.css">
+    <link rel="stylesheet" type="text/css" href="css/IDEStyle.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="ide-container">
+            <!--菜单栏./menuBar-->
+            <div class="menuBar">
+                <div class="menuList">
+                    <ul class="menuBox">
+                        <!--菜单列表item1-->
+                        <li class="menuItem menu-collapse">
+                            <span>文件</span>
+                            <!--菜单下拉列表-->
+                            <ul class="menu no-select">
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/open.png" />
+                                        打开
+                                    </div>
+                                </li>
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/save.png" />
+                                        保存
+                                    </div>
+                                </li>
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/delete.png" />
+                                        删除
+                                    </div>
+                                </li>
+                            </ul>
+                        </li> <!--end菜单列表item1-->
+                        <!--菜单列表item2-->
+                        <li class="menuItem menu-collapse">
+                            <span>视图</span>
+                            <!--菜单下拉列表-->
+                            <ul class="menu no-select">
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/open.png" />
+                                        关闭当前页签
+                                    </div>
+                                </li>
+                            </ul>
+                        </li> <!--end菜单列表item2-->
+                        <!--菜单列表item3-->
+                        <li class="menuItem menu-collapse">
+                            <span>版本</span>
+                            <!--菜单下拉列表-->
+                            <ul class="menu no-select">
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/open.png" />
+                                        提交
+                                    </div>
+                                </li>
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/save.png" />
+                                        提交并推送
+                                    </div>
+                                </li>
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/delete.png" />
+                                        拉取
+                                    </div>
+                                </li>
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/delete.png" />
+                                        推送
+                                    </div>
+                                </li>
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/delete.png" />
+                                        分支
+                                    </div>
+                                </li>
+                            </ul>
+                        </li> <!--end菜单列表item3-->
+                        <!--菜单列表item4-->
+                        <li class="menuItem menu-collapse">
+                            <span>工具</span>
+                            <!--菜单下拉列表-->
+                            <ul class="menu no-select">
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/open.png" />
+                                        新建终端
+                                    </div>
+                                </li>
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/save.png" />
+                                        生成访问链接
+                                    </div>
+                                </li>
+                            </ul>
+                        </li><!--end菜单列表item4-->
+                        <!--菜单列表item5-->
+                        <li class="menuItem menu-collapse">
+                            <span>帮助</span>
+                            <!--菜单下拉列表-->
+                            <ul class="menu no-select">
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/open.png" />
+                                        文档
+                                    </div>
+                                </li>
+                                <li class="menu-item">
+                                    <div class="menu-item-list">
+                                        <img class="icon-control" src="img/icon/save.png" />
+                                        反馈
+                                    </div>
+                                </li>
+                            </ul>
+                        </li><!--end菜单列表item5-->
+                    </ul>
+                </div>
+            </div><!--end菜单栏./menuBar-->
+
+            <!--线性文件夹 ./fileLine-->
+            <div class="fileLine">
+                <div class="file-box">
+                    <ul class="file-box-list">
+                        <li id="file_1" class="file-line-list">
+                            <img class="file-right-icon" src="img/icon/fileRight.png"/>
+                            <span>Native</span>
+                        </li>
+                        <li id="file_2" class="file-line-list">
+                            <img class="file-right-icon" src="img/icon/fileRight.png"/>
+                            <span>Too young</span>
+                        </li>
+                        <div data-target="set-modal" data-role="Modal" id="settings" class="settings-box file-line-list">
+                            <img class="set-icon" src="img/icon/setting.png"/>
+                        </div>
+                    </ul>
+                </div>
+            </div><!--end线性文件夹 ./fileLine-->
+
+            <!--设置按钮模态框-->
+            <div id="set-modal" class="modal fade">
+                <div class="modal-box">
+                    <a class="modal-close" href="#">&times;</a>
+                    <div class="modal-header">
+                        <h3>设置</h3>
+                    </div>
+                    <div class="modal-content">
+                        <p>内容。。。</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn modal-button modal-cancel">取消</button>
+                        <button class="btn modal-button modal-sure">确定</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-1"></div>
+        </div><!--./ide-container-->
+
+        <div class="content-cut-line"></div>
+
+        <!--IDE主要内容-->
+        <div class="main-content">
+            <div class="main-content-top">
+                <div class="main-content-top1">
+                    <!--树形结构边栏-->
+                    <div class="main-left">
+                        <!--树形结构文件 ./fileTree-->
+                        <div class="fileTree">
+                            <!--刷新栏./refresh-box-->
+                            <div class="refresh-box">
+                                <div id="refresh" class="refreshIcon">
+                                    <img class="refresh-icon" src="img/icon/refresh.png"/>
+                                </div>
+                            </div>
+
+                            <!--树形目录栏./treebox-->
+                            <div class="tree-wrapper">
+                                <div class="tree-box">
+                                    <div class="tree-view">
+                                        <!--&lt;!&ndash;一级目录&ndash;&gt;-->
+                                        <!--<div class="tree-view-node file-open">-->
+                                            <!--<img class="file-icon" src="img/icon/fileDown.png"/>-->
+                                            <!--<span class="tree-font">Naive</span>-->
+                                        <!--</div>-->
+                                        <!--&lt;!&ndash;二级目录&ndash;&gt;-->
+                                        <!--<span class="">-->
+                                            <!--<div class="tree-view-children">-->
+                                                <!--<div class="tree-view-node">-->
+                                                    <!--<img class="file-icon" src="img/icon/file.png"/>-->
+                                                    <!--<span class="tree-font">Too young</span>-->
+                                                <!--</div>-->
+                                                <!--<div class="tree-view-node file-open">-->
+                                                    <!--<img class="file-icon" src="img/icon/fileDown.png"/>-->
+                                                    <!--<span class="tree-font">HaHa</span>-->
+                                                <!--</div>-->
+                                                <!--&lt;!&ndash;三级目录&ndash;&gt;-->
+                                                <!--<span class="">-->
+                                                    <!--<div class="tree-view-children">-->
+                                                        <!--<div class="tree-view-leaf">-->
+                                                            <!--<img class="file-icon" src="img/icon/doc.png"/>-->
+                                                            <!--<span class="tree-font">Gua.php</span>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</span>-->
+                                            <!--</div>-->
+                                        <!--</span>-->
+                                        <!--<span class="">-->
+                                             <!--<div class="tree-view-leaf">-->
+                                                 <!--<img class="file-icon" src="img/icon/doc.png"/>-->
+                                                 <!--<span class="tree-font">Gua.php</span>-->
+                                             <!--</div>-->
+                                             <!--<button id="aaaaaaa">test</button>-->
+                                        <!--</span>-->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!--end树形结构文件 ./fileTree-->
+                    </div> <!--end树形结构边栏 ./main-left-->
+                    <div class="content-slide-line"></div>
+
+                    <!--文本编辑器部分-->
+                    <div class="main-right">
+                        <!--文本文件页-->
+                        <div class="editor-wrapper">
+                            <div class="editor-tab">
+                                <ul class="tab-select-header">
+                                    <!--<li class="tab-select-item active" data-target="tab_1" data-role="tabItem">-->
+                                       <!--<div class="tab-item" >-->
+                                           <!--<img class="file-icon" src="img/icon/doc.png"/>-->
+                                           <!--<span class="tab-font">Gua.php</span>-->
+                                           <!--<a href="#" class="tab-close">&times;</a>-->
+                                       <!--</div>-->
+                                    <!--</li>-->
+                                </ul>
+                                <div class="editor-content">
+                                    <!--文本编辑具体部分-->
+                                    <div id="fileTab_1" class="">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end ./editor-wrapper-->
+                    </div><!--end本编辑器部分-->
+                </div><!--end ./main-content-top1-->
+            </div><!--end ./main-content-top-->
+
+            <!--<div class="content-cut-line"></div>-->
+
+            <!--terminal部分-->
+            <div class="terminal-wrapper none">
+                <div class="terminal-box-out terminal-common1">
+
+                    <!--外框栏（左边内容栏）-->
+                    <div class="terminal-box-left terminal-common1">
+                        <!--选择卡片栏-->
+                        <div class="terminal-tab">
+                            <ul class="terminal-tab-header">
+                                <li class="terminal-tab-item active" data-role="termTabItem" data-target="termTab_1">
+                                    <div class="terminal-sel-item">
+                                        <span class="tab-font">terminal</span>
+                                        <a href="#" class="tab-close">&times;</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div><!--end ./terminal-tab-->
+                        <div class="terminal-content" id="termTab_1">
+                            <textarea id="terminalText" class="terminal-text"></textarea>
+                        </div>
+                        <!--<textarea id="" class=""></textarea>-->
+                    </div>
+
+                    <!--外框栏（右边框刷新）-->
+                    <div class="terminal-box-right">
+                        <div class="terminal-refresh">
+                            <img src="img/icon/refresh.png" class="file-icon"/>
+                        </div>
+                    </div>
+                </div>
+            </div> <!--end terminal部分-->
+
+        </div><!--end ./main-content-->
+
+        <!--terminal按钮部分-->
+        <div class="terminal-button-wrapper">
+            <div class="terminal-button-box">
+                <div class="terminal-button">
+                    <img id="terminal-btn" class="set-icon" src="img/icon/terminal.png"/>
+                    <span>终端</span>
+                </div>
+            </div>
+        </div>
+    </div><!--./wrapper-->
+
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/basic.js"></script>
+    <script type="text/javascript" src="js/menuBar.js"></script>
+    <script type="text/javascript" src="js/controller.js"></script>
+
+    <script type="text/javascript">
+        (function($){
+            //文件卡片和terminal卡片
+            function setfileTab(){
+                var data = $("#fileTab").html().format(1, "aaa.php");
+                //添加卡片
+                $(".tab-select-header").append(data);
+                //添加具体代码内容
+                $(".editor-content").append();
+                var tab_item =  $("li[data-role='tabItem']:last");
+                $("li[data-role='tabItem']").each(function(){
+                    if($(this).hasClass("active") && $(this)!==tab_item){
+                        $(this).removeClass("active");
+                    }
+                });
+                tab_item.addClass('active');
+                var test = 'tabItem';
+                tab_item.tab(test);
+            }
+            function setTermTab(){
+                //添加卡片
+                var data = $("#termTab").html().format(1, "aaa.php");
+                $(".terminal-tab-header").append(data);
+                var tab_item =  $("li[data-role='termTabItem']:last");
+                $("li[data-role='termTabItem']").each(function(){
+                    if($(this).hasClass("active") && $(this)!==tab_item){
+                        $(this).removeClass("active");
+                    }
+                });
+                tab_item.addClass('active');
+                var test = 'termTabItem';
+                tab_item.tab(test);
+            }
+
+            $("#aaaaaaa").click(function(){
+                setfileTab();
+                //setTermTab();
+            });
+
+            var fileTreeData = [
+                {id:0, pid:-1, type:"folder", name:"webIDE"},
+                {id:1, pid:0, type:"folder", name:"html"},
+                {id:2, pid:1, type:"file", name:"index.html"},
+                {id:3, pid:0, type:"folder", name:"js"},
+                {id:4, pid:0, type:"file", name:"style.css"}
+            ];
+            $.fn.tree(fileTreeData, {
+                treeBox: $(".tree-view"),
+                treeViewNode: "tree-view-node"
+            });
+
+
+        })(jQuery);
+    </script>
+
+    <script type="text/x-handlebars-template" id="fileTab">
+        <!--文件卡片目录-->
+        <li class="tab-select-item" data-target="fileTab_{0}" data-role="tabItem">
+            <div class="tab-item">
+                <img class="file-icon" src="img/icon/doc.png"/>
+                <span class="tab-font">{1}</span>
+                <a href="#" class="tab-close">&times;</a>
+            </div>
+        </li>
+    </script>
+
+    <script type="text/x-handlebars-template" id="termTab">
+        <!--terminal卡片目录-->
+        <li class="terminal-tab-item" data-role="termTabItem" data-target="termTab_{0}">
+            <div class="terminal-sel-item">
+                <span class="tab-font">{1}</span>
+                <a href="#" class="tab-close">&times;</a>
+            </div>
+        </li>
+    </script>
+</body>
+</html>
