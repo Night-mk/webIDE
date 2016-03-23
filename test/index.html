@@ -149,7 +149,7 @@
                 </div>
             </div><!--end线性文件夹 ./fileLine-->
 
-            <!--设置按钮模态框-->
+            <!--设置setting按钮模态框-->
             <div id="set-modal" class="modal fade">
                 <div class="modal-box">
                     <a class="modal-close" href="#">&times;</a>
@@ -164,8 +164,49 @@
                         <button class="btn modal-button modal-sure">确定</button>
                     </div>
                 </div>
-            </div>
+            </div><!--end 设置setting按钮模态框-->
+
+            <!--创建文件模态框-->
+            <div data-target="file-create" data-role="Modal" id="fileCreate"></div>
+            <div id="file-create" class="modal fade">
+                <div class="modal-box">
+                    <a class="modal-close" href="#">&times;</a>
+                    <div class="modal-header">
+                        <h3>新建文件</h3>
+                    </div>
+                    <div class="modal-content">
+                        <form>
+                            请输入文件名: <input class="modal-input" type="text" />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn modal-button modal-cancel">取消</button>
+                        <button class="btn modal-button modal-sure">确定</button>
+                    </div>
+                </div>
+            </div><!--end 创建文件模态框-->
+
+            <!--创建文件夹模态框-->
+            <div data-target="folder-create" data-role="Modal" id="folderCreate"></div>
+            <div id="folder-create" class="modal fade">
+                <div class="modal-box">
+                    <a class="modal-close" href="#">&times;</a>
+                    <div class="modal-header">
+                        <h3>新建文件夹</h3>
+                    </div>
+                    <div class="modal-content">
+                        <form>
+                            请输入文件夹名: <input class="modal-input" type="text" />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn modal-button modal-cancel">取消</button>
+                        <button class="btn modal-button modal-sure">确定</button>
+                    </div>
+                </div>
+            </div><!--end 创建文件夹模态框-->
             <div class="modal-1"></div>
+
         </div><!--./ide-container-->
 
         <div class="content-cut-line"></div>
@@ -229,6 +270,7 @@
 
                         </div> <!--end树形结构文件 ./fileTree-->
                     </div> <!--end树形结构边栏 ./main-left-->
+
                     <div class="content-slide-line"></div>
 
                     <!--文本编辑器部分-->
@@ -348,6 +390,7 @@
                 //setTermTab();
             });
 
+            //目录树的初始化
             var fileTreeData = [
                 {id:0, pid:-1, type:"folder", name:"webIDE"},
                 {id:1, pid:0, type:"folder", name:"html"},
@@ -358,6 +401,43 @@
             $.fn.tree(fileTreeData, {
                 treeBox: $(".tree-view"),
                 treeViewNode: "tree-view-node"
+            });
+
+            //树形结构目录右击事件
+            var fileCreate = {
+                text: "新建文件",
+                func: function() {
+                    console.log(this.id);
+                    $("#fileCreate").click();
+                }
+            },  folderCreate = {
+                text: "新建文件夹",
+                func: function() {
+                    $("#folderCreate").click();
+                }
+            },  fileDelete = {
+                text: "删除",
+                func: function() {
+
+                }
+            },  rename = {
+                text: "重命名",
+                func: function() {
+
+                }
+            };
+
+            var rClickData1 = [
+                [fileCreate, folderCreate, fileDelete, rename]
+            ];
+            var rClickData2 = [
+                [fileDelete, rename]
+            ];
+            $(".tree-view-node").rClickMenu(rClickData1,{
+                name: "folder"
+            });
+            $(".tree-view-leaf").rClickMenu(rClickData2,{
+                name: "file"
             });
 
 

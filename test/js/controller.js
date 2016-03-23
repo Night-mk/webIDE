@@ -7,46 +7,63 @@
  * 模态框模块
  * ======================================================================== */
 (function($){
-   $("div[data-role='Modal']").each(function(){
-       var trigger = $(this);
-       var set_modal = $("#"+ trigger.data("target"));
-       var modal_box = set_modal.find(".modal-box");
-       var modal_close = set_modal.find(".modal-close");
-       var modal_cancel = set_modal.find(".modal-cancel");
-       var modal_sure = set_modal.find(".modal-sure");
-       var modal_1 = $(".modal-1");
-       if(!set_modal.length){return true;}
+    //模态框显示、消失模块
+    $("div[data-role='Modal']").each(function(){
+        var trigger = $(this);
+        var set_modal = $("#"+ trigger.data("target"));
+        var modal_box = set_modal.find(".modal-box");
+        var modal_close = set_modal.find(".modal-close");
+        var modal_cancel = set_modal.find(".modal-cancel");
+        var modal_sure = set_modal.find(".modal-sure");
+        var modal_text = set_modal.find(".modal-input");
 
-       trigger.click(function(){
-           $("body").addClass("modal-open");
-           modal_1.show('fast');
-           set_modal.fadeIn("fast", function(){
-               set_modal.addClass("in");
-           });
-           return false;
-       });
+        var modal_1 = $(".modal-1");
+        if(!set_modal.length){return true;}
 
-       modal_close.click(function(){
-           $("body").removeClass("modal-open");
-           modal_1.hide();
-           set_modal.fadeOut("fast", function(){
-               set_modal.removeClass("in");
-           });
-       });
+        trigger.click(function(){
+            $("body").addClass("modal-open");
+            modal_1.show('fast');
+            set_modal.fadeIn("fast", function(){
+                if(modal_text.val() !== ''){
+                    modal_text.attr("value",'');
+                }
+                set_modal.addClass("in");
+            });
+            return false;
+        });
 
-       modal_cancel.click(function(){
-           modal_close.trigger("click");
-       });
-       modal_sure.click(function(){
-           //确定设置的逻辑
+        modal_close.click(function(){
+            $("body").removeClass("modal-open");
+            modal_1.hide();
+            set_modal.fadeOut("fast", function(){
+                set_modal.removeClass("in");
+            });
+        });
 
-           modal_close.trigger("click");
-       });
-       //阻止其他修改事件
-       modal_box.click(function(e){
-           e.stopPropagation();
-       });
-   });
+        modal_cancel.click(function(){
+            modal_close.trigger("click");
+        });
+        modal_sure.click(function(){
+            modal_close.trigger("click");
+        });
+        //阻止其他修改事件
+        modal_box.click(function(e){
+            e.stopPropagation();
+        });
+    });
+
+    //模态框确定事件
+    $.fn.modalSure = function(){
+        var defaults = {
+            id: this.id,//点击的文件夹的id
+            mode: ""//模式：创建文件、创建文件夹、删除、设置
+        };
+
+        var setting = $.extend({}, defaults);
+
+
+    }
+
 })(jQuery);
 
 /* ========================================================================
@@ -391,22 +408,38 @@
 
         //为文件树添加事件：点击文件夹变化图片、下拉、收起内容
         addListener: function(obj){
-            console.log(obj);
             var imgSrc = "img/icon/";
+            var childText = $(".tree-font");
+            //点击文件改变颜色
+            childText.each(function(){
+                var child_text = $(this);
+                child_text.bind("click", function(){
+                    $(".tree-font").each(function(){
+                       if($(this).hasClass("node-selected")){
+                           $(this).removeClass("node-selected");
+                       }
+                    });
+                    $(this).addClass("node-selected");
+                });
+            });
+            //图片变化，下拉，收起
             obj.each(function(){
                 var Obj = $(this);
                 var imgObj = $(this).find("img").eq(0);//点击变化图片
                 var childObj = $(this).next("span")[0];//文件夹下的内容
-                console.log(imgObj.attr("src"));
                 imgObj.bind("click", function(){
                     if(Obj.hasClass("file-open")){
                         $(this).attr("src", imgSrc+"file.png");
                         Obj.removeClass("file-open");
-                        childObj.style.display = "none";
+                        if(typeof childObj==='object'){
+                            childObj.style.display = "none";
+                        }
                     }else{
                         $(this).attr("src", imgSrc+"fileDown.png");
                         Obj.addClass("file-open");
-                        childObj.style.display = "block";
+                        if(typeof childObj==='object'){
+                            childObj.style.display = "block";
+                        }
                     }
                 });
             });
@@ -435,7 +468,7 @@
                 src = "img/icon/";
 
             if($.isArray(treeNodes) && treeNodes.length){
-                treeHtml += '<div class="'+treeCl+'node">'+
+                treeHtml += '<div id="file_0" class="'+treeCl+'node">'+
                                 '<img class="file-icon" src="'+src+'file.png"/>'+
                                 '<span class="tree-font">'+treeNodes[0].name+'</span>'+
                             '</div>';

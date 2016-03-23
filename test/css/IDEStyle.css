@@ -233,6 +233,16 @@ a{
     font-size: 1em;
     font-family: 微软雅黑;
 }
+.modal-input{
+    width: 350px;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 20px;
+    line-height: 20px;
+    padding: 5px;
+}
+
+
 .btn{
     display: inline-block;
     padding: 6px 12px;
@@ -324,6 +334,9 @@ a{
 .tree-view-node > img,span{
     vertical-align: middle;
 }
+.node-selected{
+    color: #337ab7;
+}
 .file-open{
 
 }
@@ -369,8 +382,8 @@ a{
 }
 .r-menu-a{
     display: block;
-    height: 25px;
-    line-height: 25px;
+    height: 30px;
+    line-height: 30px;
     padding: 0 5px 0 25px;
     overflow: hidden;
     font-size: 1em;
