@@ -205,6 +205,45 @@
                     </div>
                 </div>
             </div><!--end 创建文件夹模态框-->
+
+            <!--删除文件模态框-->
+            <div data-target="file-delete" data-role="Modal" id="fileDelete"></div>
+            <div id="file-delete" class="modal fade">
+                <div class="modal-box">
+                    <a class="modal-close" href="#">&times;</a>
+                    <div class="modal-header">
+                        <h3>删除</h3>
+                    </div>
+                    <div class="modal-content">
+                        <h3>确定要删除吗</h3>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn modal-button modal-cancel">取消</button>
+                        <button class="btn modal-button modal-sure">确定</button>
+                    </div>
+                </div>
+            </div><!--end 删除文件模态框-->
+
+            <!--重命名模态框-->
+            <div data-target="re-name" data-role="Modal" id="reName"></div>
+            <div id="re-name" class="modal fade">
+                <div class="modal-box">
+                    <a class="modal-close" href="#">&times;</a>
+                    <div class="modal-header">
+                        <h3>重命名</h3>
+                    </div>
+                    <div class="modal-content">
+                        <form>
+                            请输入新的文件名: <input class="modal-input" type="text" />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn modal-button modal-cancel">取消</button>
+                        <button class="btn modal-button modal-sure">确定</button>
+                    </div>
+                </div>
+            </div><!--end 重命名模态框-->
+
             <div class="modal-1"></div>
 
         </div><!--./ide-container-->
@@ -391,54 +430,100 @@
             });
 
             //目录树的初始化
-            var fileTreeData = [
-                {id:0, pid:-1, type:"folder", name:"webIDE"},
-                {id:1, pid:0, type:"folder", name:"html"},
-                {id:2, pid:1, type:"file", name:"index.html"},
-                {id:3, pid:0, type:"folder", name:"js"},
-                {id:4, pid:0, type:"file", name:"style.css"}
-            ];
+//            var fileTreeData = [
+//                {id:0, pid:-1, type:"folder", name:"webIDE"},
+//                {id:1, pid:0, type:"folder", name:"html"},
+//                {id:2, pid:1, type:"file", name:"index.html"},
+//                {id:3, pid:0, type:"folder", name:"js"},
+//                {id:4, pid:0, type:"file", name:"style.css"}
+//            ];
+
+            var fileTreeData = null;
+            $.ajax({
+                type: "GET",
+                url: "http://121.42.27.129/file/dir",
+                dataType: "JSONP",
+                success: function(data){
+                    console.log(data);
+                    fileTreeData = eval("("+data+")");
+                }
+            });
+
+//            $.getJSON("http://121.42.27.129/file/dir", function(data){
+//                fileTreeData = eval("("+data+")");
+//            });
+
             $.fn.tree(fileTreeData, {
-                treeBox: $(".tree-view"),
+                treeBox: "tree-view",
                 treeViewNode: "tree-view-node"
             });
 
-            //树形结构目录右击事件
-            var fileCreate = {
-                text: "新建文件",
-                func: function() {
-                    console.log(this.id);
-                    $("#fileCreate").click();
-                }
-            },  folderCreate = {
-                text: "新建文件夹",
-                func: function() {
-                    $("#folderCreate").click();
-                }
-            },  fileDelete = {
-                text: "删除",
-                func: function() {
+            //树形结构目录左击事件
+            $.fn.lClickAddListener = function(){
 
-                }
-            },  rename = {
-                text: "重命名",
-                func: function() {
-
-                }
             };
 
-            var rClickData1 = [
-                [fileCreate, folderCreate, fileDelete, rename]
-            ];
-            var rClickData2 = [
-                [fileDelete, rename]
-            ];
-            $(".tree-view-node").rClickMenu(rClickData1,{
-                name: "folder"
-            });
-            $(".tree-view-leaf").rClickMenu(rClickData2,{
-                name: "file"
-            });
+            //树形结构目录右击事件
+            $.fn.rClickAddListener = function (){
+                var fileCreate = {
+                    text: "新建文件",
+                    func: function() {
+                        var idfile = new Array();
+                        idfile.push(this.id);
+                        $("#fileCreate").click();
+                        $("#file-create").find(".modal-sure").modalSure({
+                            id: idfile,
+                            mode: "file"
+                        });
+                    }
+                },  folderCreate = {
+                    text: "新建文件夹",
+                    func: function() {
+                        var idfile = new Array();
+                        idfile.push(this.id);
+                        $("#folderCreate").click();
+                        $("#folder-create").find(".modal-sure").modalSure({
+                            id: idfile,
+                            mode: "folder"
+                        });
+                    }
+                },  fileDelete = {
+                    text: "删除",
+                    func: function() {
+                        var idfile = new Array();
+                        idfile.push(this.id);
+                        $("#fileDelete").click();
+                        $("#file-delete").find(".modal-sure").modalSure({
+                            id: idfile
+                        });
+                    }
+                },  rename = {
+                    text: "重命名",
+                    func: function() {
+                        var idfile = new Array();
+                        idfile.push(this.id);
+                        $("#reName").click();
+                        $("#re-name").find(".modal-sure").modalSure({
+                            id: idfile,
+                            mode: "rename"
+                        });
+                    }
+                };
+
+                var rClickData1 = [
+                    [fileCreate, folderCreate, fileDelete, rename]
+                ];
+                var rClickData2 = [
+                    [fileDelete, rename]
+                ];
+                $(".tree-view-node").rClickMenu(rClickData1,{
+                    name: "folder"
+                });
+                $(".tree-view-leaf").rClickMenu(rClickData2,{
+                    name: "file"
+                });
+            };
+
 
 
         })(jQuery);

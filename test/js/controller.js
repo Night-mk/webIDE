@@ -8,60 +8,112 @@
  * ======================================================================== */
 (function($){
     //模态框显示、消失模块
-    $("div[data-role='Modal']").each(function(){
-        var trigger = $(this);
-        var set_modal = $("#"+ trigger.data("target"));
-        var modal_box = set_modal.find(".modal-box");
-        var modal_close = set_modal.find(".modal-close");
-        var modal_cancel = set_modal.find(".modal-cancel");
-        var modal_sure = set_modal.find(".modal-sure");
-        var modal_text = set_modal.find(".modal-input");
+    function modalSet(){
+        $("div[data-role='Modal']").each(function(){
+            var trigger = $(this);
+            var set_modal = $("#"+ trigger.data("target"));
+            var modal_box = set_modal.find(".modal-box");
+            var modal_close = set_modal.find(".modal-close");
+            var modal_cancel = set_modal.find(".modal-cancel");
+            var modal_sure = set_modal.find(".modal-sure");
+            var modal_text = set_modal.find(".modal-input");
 
-        var modal_1 = $(".modal-1");
-        if(!set_modal.length){return true;}
+            var modal_1 = $(".modal-1");
+            if(!set_modal.length){return true;}
 
-        trigger.click(function(){
-            $("body").addClass("modal-open");
-            modal_1.show('fast');
-            set_modal.fadeIn("fast", function(){
-                if(modal_text.val() !== ''){
-                    modal_text.attr("value",'');
+            trigger.click(function(){
+                $("body").addClass("modal-open");
+                modal_1.show('fast');
+                set_modal.fadeIn("fast", function(){
+                    if(modal_text.val() != ''){
+                        modal_text.val("");
+                    }
+                    set_modal.addClass("in");
+                });
+                return false;
+            });
+
+            modal_close.click(function(){
+                $("body").removeClass("modal-open");
+                modal_1.hide();
+                set_modal.fadeOut("fast", function(){
+                    set_modal.removeClass("in");
+                });
+            });
+
+            modal_cancel.click(function(){
+                modal_close.trigger("click");
+            });
+            modal_sure.click(function(){
+                if(trigger.data("target")==="set-modal"){
+                    modal_close.trigger("click");
                 }
-                set_modal.addClass("in");
             });
-            return false;
-        });
-
-        modal_close.click(function(){
-            $("body").removeClass("modal-open");
-            modal_1.hide();
-            set_modal.fadeOut("fast", function(){
-                set_modal.removeClass("in");
+            //阻止其他修改事件
+            modal_box.click(function(e){
+                e.stopPropagation();
             });
         });
+    }
 
-        modal_cancel.click(function(){
-            modal_close.trigger("click");
-        });
-        modal_sure.click(function(){
-            modal_close.trigger("click");
-        });
-        //阻止其他修改事件
-        modal_box.click(function(e){
-            e.stopPropagation();
-        });
-    });
+    modalSet();
 
-    //模态框确定事件
-    $.fn.modalSure = function(){
+    //模态框确定事件，
+    $.fn.modalSure = function(options){
         var defaults = {
-            id: this.id,//点击的文件夹的id
-            mode: ""//模式：创建文件、创建文件夹、删除、设置
+            id: "",//点击的文件夹的id
+            mode: ""//模式：创建文件、创建文件夹、删除、重命名
         };
 
-        var setting = $.extend({}, defaults);
+        var setting = $.extend({}, defaults, options);
 
+        var modal_sure = $(this);
 
+        modal_sure.bind("click", function(){
+            //创建文件、文件夹、重命名
+            var filename = $("#file-create").find(".modal-input").val();
+            var sureData = null,
+                requestUrl = null;
+            if(setting.mode!=="delete"){
+                sureData = {
+                    id: setting.id[0],
+                    filename: filename,
+                    mode: setting.mode
+                };
+                if(setting.mode!=="rename"){//创建
+                    requestUrl = "";
+                }else{//重命名
+                    requestUrl = "";
+                }
+            }else{//删除
+                sureData = {
+                    id: setting.id
+                };
+                requestUrl = "";
+            }
+
+            $.ajax({
+                type: "post",
+                url: requestUrl,
+                data: sureData,
+                success: function(data){
+                    //重新初始化树目录
+                    var data1 = eval("("+data+")");
+                    if(data1===2){
+                        alert("操作失败");
+                    }else{
+                        $.fn.tree(data1, {
+                            treeBox: "tree-view",
+                            treeViewNode: "tree-view-node"
+                        });
+                        $.fn.rClickAddListener();
+                    }
+                },
+                error: function(){
+                    alert("服务器出错啦~~~");
+                }
+            });
+        });
     }
 
 })(jQuery);
@@ -358,14 +410,6 @@
      ];
     */
 
-    var fileTreeData = [
-        {id:0, pid:-1, type:"folder", name:"webIDE"},
-        {id:1, pid:0, type:"folder", name:"html"},
-        {id:2, pid:1, type:"file", name:"index.html"},
-        {id:3, pid:0, type:"folder", name:"js"},
-        {id:4, pid:0, type:"file", name:"style.css"}
-    ];
-
     var Tree = function(element, options){
         this.$element = $(element);
         this.options = $.extend({}, $.fn.tree.defaults, options);
@@ -497,7 +541,7 @@
         };
 
         //调用显示
-        setting.treeBox.append(showTree(data));
+        $("."+setting.treeBox).append(showTree(data));
         tree.addListener($("."+setting.treeViewNode));
 
         //if($.isFunction(setting.showTree)){
