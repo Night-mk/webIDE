@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>webIDE</title>
+    <link rel="stylesheet" href="css/codemirror.css">
     <link rel="stylesheet" type="text/css" href="css/iconStyle.css">
     <link rel="stylesheet" type="text/css" href="css/IDEStyle.css">
 </head>
@@ -139,7 +140,7 @@
                             <span>Native</span>
                         </li>
                         <li id="file_2" class="file-line-list">
-                            <img class="file-right-icon" src="img/icon/fileRight.png"/>
+                            <img class="file-right-icon" src="img/icon/doc.png"/>
                             <span>Too young</span>
                         </li>
                         <div data-target="set-modal" data-role="Modal" id="settings" class="settings-box file-line-list">
@@ -215,7 +216,7 @@
                         <h3>删除</h3>
                     </div>
                     <div class="modal-content">
-                        <h3>确定要删除吗</h3>
+                        <p>确定要删除吗</p>
                     </div>
                     <div class="modal-footer">
                         <button class="btn modal-button modal-cancel">取消</button>
@@ -301,7 +302,7 @@
                                                  <!--<img class="file-icon" src="img/icon/doc.png"/>-->
                                                  <!--<span class="tree-font">Gua.php</span>-->
                                              <!--</div>-->
-                                             <!--<button id="aaaaaaa">test</button>-->
+                                             <button id="aaaaaaa">test</button>
                                         <!--</span>-->
                                     </div>
                                 </div>
@@ -326,11 +327,12 @@
                                        <!--</div>-->
                                     <!--</li>-->
                                 </ul>
-                                <div class="editor-content">
-                                    <!--文本编辑具体部分-->
-                                    <div id="fileTab_1" class="">
+                            </div>
 
-                                    </div>
+                            <div class="editor-content">
+                                <!--文本编辑具体部分-->
+                                <div class="editor-box">
+
                                 </div>
                             </div>
                         </div><!--end ./editor-wrapper-->
@@ -386,76 +388,91 @@
     </div><!--./wrapper-->
 
     <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/codemirror.js"></script>
+    <script type="text/javascript" src="js/codeMode/javascript/javascript.js"></script>
+    <script type="text/javascript" src="js/codeMode/jsx/jsx.js"></script>
     <script type="text/javascript" src="js/basic.js"></script>
     <script type="text/javascript" src="js/menuBar.js"></script>
     <script type="text/javascript" src="js/controller.js"></script>
 
     <script type="text/javascript">
         (function($){
-            //文件卡片和terminal卡片
-            function setfileTab(){
-                var data = $("#fileTab").html().format(1, "aaa.php");
-                //添加卡片
-                $(".tab-select-header").append(data);
-                //添加具体代码内容
-                $(".editor-content").append();
-                var tab_item =  $("li[data-role='tabItem']:last");
-                $("li[data-role='tabItem']").each(function(){
-                    if($(this).hasClass("active") && $(this)!==tab_item){
-                        $(this).removeClass("active");
-                    }
-                });
-                tab_item.addClass('active');
-                var test = 'tabItem';
-                tab_item.tab(test);
-            }
-            function setTermTab(){
-                //添加卡片
-                var data = $("#termTab").html().format(1, "aaa.php");
-                $(".terminal-tab-header").append(data);
-                var tab_item =  $("li[data-role='termTabItem']:last");
-                $("li[data-role='termTabItem']").each(function(){
-                    if($(this).hasClass("active") && $(this)!==tab_item){
-                        $(this).removeClass("active");
-                    }
-                });
-                tab_item.addClass('active');
-                var test = 'termTabItem';
-                tab_item.tab(test);
-            }
+            $.fn.codeText = function(options){
+                var defaults = {
+                    codeId:""
+                };
+
+                var setting = $.extend({}, defaults, options);
+
+                var editorArea = '<div class="editor-area-box" id="'+setting.codeId+'">' +
+                                    '<textarea id="'+setting.codeId+'_box" class="editor-area"></textarea>' +
+                                '</div>';
+                if($(".editor-box").children().length > 0){
+                    $(".editor-box").children().each(function(){
+                        var codeObj = $(this);
+                        codeObj.css({"display":"none"});
+                    });
+                }
+                $(".editor-box").append(editorArea);
+
+                //调用codemirror的代码
+                var codeObj = document.getElementById(setting.codeId+"_box");
+                var editor = CodeMirror.fromTextArea(codeObj,
+                        {lineNumbers: true,//是否显示行号
+                            mode: "jsx",//默认脚本编码
+                            lineWrapping: false//是否强制换行
+                        });
+                //设置界面风格（主题）
+                //editor.setOption("theme",'3024-day');
+                var text = codeObj.value;
+                editor.setValue(text);
+
+                //加载代码文件
+
+                //修改字体
+                if($("div").hasClass("CodeMirror-sizer")){
+                    $(".CodeMirror-sizer").css({"font-family":"Arial"});
+                }
+
+                //添加行点击背景色
+                /*$(".CodeMirror-line").click(function(){
+                    $(".CodeMirror-line").each(function(){
+                        $(this).css({"background":"transparent"});
+                    });
+                    $(this).css({"background":"#FFFFF7"});
+                });*/
+            };
+
 
             $("#aaaaaaa").click(function(){
-                setfileTab();
-                //setTermTab();
+                console.log($(".CodeMirror-line"));
             });
 
             //目录树的初始化
-//            var fileTreeData = [
-//                {id:0, pid:-1, type:"folder", name:"webIDE"},
-//                {id:1, pid:0, type:"folder", name:"html"},
-//                {id:2, pid:1, type:"file", name:"index.html"},
-//                {id:3, pid:0, type:"folder", name:"js"},
-//                {id:4, pid:0, type:"file", name:"style.css"}
-//            ];
+            var fileTreeData = [
+                {id:0, pid:-1, type:"folder", name:"webIDE"},
+                {id:1, pid:0, type:"folder", name:"html"},
+                {id:2, pid:1, type:"file", name:"index.html"},
+                {id:3, pid:0, type:"folder", name:"js"},
+                {id:4, pid:0, type:"file", name:"style.css"}
+            ];
 
-            var fileTreeData = null;
-            $.ajax({
-                type: "GET",
-                url: "http://121.42.27.129/file/dir",
-                dataType: "JSONP",
-                success: function(data){
-                    console.log(data);
-                    fileTreeData = eval("("+data+")");
-                }
-            });
-
-//            $.getJSON("http://121.42.27.129/file/dir", function(data){
-//                fileTreeData = eval("("+data+")");
+//            var fileTreeData = null;
+//            $.ajax({
+//                type: "GET",
+//                url: "http://121.42.27.129/file/dir",
+//                dataType: "JSONP",
+//                success: function(data){
+//                    console.log(data);
+//                    fileTreeData = eval("("+data+")");
+//                }
 //            });
+
 
             $.fn.tree(fileTreeData, {
                 treeBox: "tree-view",
-                treeViewNode: "tree-view-node"
+                treeViewNode: "tree-view-node",
+                treeViewLeaf: "tree-view-leaf"
             });
 
             //树形结构目录左击事件
@@ -463,75 +480,12 @@
 
             };
 
-            //树形结构目录右击事件
-            $.fn.rClickAddListener = function (){
-                var fileCreate = {
-                    text: "新建文件",
-                    func: function() {
-                        var idfile = new Array();
-                        idfile.push(this.id);
-                        $("#fileCreate").click();
-                        $("#file-create").find(".modal-sure").modalSure({
-                            id: idfile,
-                            mode: "file"
-                        });
-                    }
-                },  folderCreate = {
-                    text: "新建文件夹",
-                    func: function() {
-                        var idfile = new Array();
-                        idfile.push(this.id);
-                        $("#folderCreate").click();
-                        $("#folder-create").find(".modal-sure").modalSure({
-                            id: idfile,
-                            mode: "folder"
-                        });
-                    }
-                },  fileDelete = {
-                    text: "删除",
-                    func: function() {
-                        var idfile = new Array();
-                        idfile.push(this.id);
-                        $("#fileDelete").click();
-                        $("#file-delete").find(".modal-sure").modalSure({
-                            id: idfile
-                        });
-                    }
-                },  rename = {
-                    text: "重命名",
-                    func: function() {
-                        var idfile = new Array();
-                        idfile.push(this.id);
-                        $("#reName").click();
-                        $("#re-name").find(".modal-sure").modalSure({
-                            id: idfile,
-                            mode: "rename"
-                        });
-                    }
-                };
-
-                var rClickData1 = [
-                    [fileCreate, folderCreate, fileDelete, rename]
-                ];
-                var rClickData2 = [
-                    [fileDelete, rename]
-                ];
-                $(".tree-view-node").rClickMenu(rClickData1,{
-                    name: "folder"
-                });
-                $(".tree-view-leaf").rClickMenu(rClickData2,{
-                    name: "file"
-                });
-            };
-
-
-
         })(jQuery);
     </script>
 
     <script type="text/x-handlebars-template" id="fileTab">
         <!--文件卡片目录-->
-        <li class="tab-select-item" data-target="fileTab_{0}" data-role="tabItem">
+        <li class="tab-select-item" data-role="tabItem" data-target="fileTab_{0}" id="file_tab_{0}">
             <div class="tab-item">
                 <img class="file-icon" src="img/icon/doc.png"/>
                 <span class="tab-font">{1}</span>

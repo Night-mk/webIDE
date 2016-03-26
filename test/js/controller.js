@@ -126,8 +126,52 @@
  * ======================================================================== */
 (function($){
     //在添加卡片的时候绑定事件
-    $.fn.tab = function(test){
+    $.fn.tab = function(test, options){
+        var defaults = {
+            id: "",//文件卡片目录模板里的id，目录id加工之后的id
+            filename: ""
+        };
+
+        var setting = $.extend({}, defaults, options);
+
+        //文件卡片和terminal卡片
+        function setfileTab(){
+            var data = $("#fileTab").html().format(setting.id, setting.filename);
+            //添加卡片
+            $(".tab-select-header").append(data);
+            //添加具体代码内容
+            $(".editor-content").append();
+            var tab_item =  $("li[data-role='tabItem']:last");
+            $("li[data-role='tabItem']").each(function(){
+                if($(this).hasClass("active") && $(this)!==tab_item){
+                    $(this).removeClass("active");
+                }
+            });
+            tab_item.addClass('active');
+            return tab_item;
+        }
+        function setTermTab(){
+            //添加terminal卡片
+            var data = $("#termTab").html().format(setting.id, setting.filename);
+            $(".terminal-tab-header").append(data);
+            var tab_item =  $("li[data-role='termTabItem']:last");
+            $("li[data-role='termTabItem']").each(function(){
+                if($(this).hasClass("active") && $(this)!==tab_item){
+                    $(this).removeClass("active");
+                }
+            });
+            tab_item.addClass('active');
+            return tab_item;
+        }
+
         var tabItem = $(this);
+
+        if(test==="tabItem"){
+            tabItem = setfileTab();
+        }else if(test==="termTabItem"){
+            tabItem = setTermTab();
+        }
+
         var tabClose = tabItem.find(".tab-close");
         var Tab = {
             //点击卡片
@@ -140,7 +184,18 @@
                         }
                     });
                     tabItem.addClass("active");
+
+                    //显示代码内容
+                    $(".editor-box").children().each(function(){
+                        var codeObj = $(this);
+                        if("fileTab_"+setting.id === codeObj.attr("id")){
+                            codeObj.css({"display":"block"});
+                        }else{
+                            codeObj.css({"display":"none"});
+                        }
+                    });
                 });
+
             },
             //删除卡片
             closeClick: function(){
@@ -165,6 +220,17 @@
                             tabItem.remove();
                         }
                     });
+
+                    //删除对应的代码部分
+                    $(".editor-box").find("#"+tabItem.data("target")).remove();
+
+                    //显示当前选中的代码
+                    $("#"+$("li[data-role='"+test+"']").data("target"));
+                    $("li[data-role='"+test+"']").each(function(){
+                        if($(this).hasClass("active")){
+
+                        }
+                    });
                 });
             },
             init: function () {
@@ -172,6 +238,7 @@
                 this.closeClick();
             }
         };
+
         Tab.init();
     };
 
@@ -386,6 +453,67 @@
         }
     });
 
+    //树形结构目录右击事件
+    $.fn.rClickAddListener = function (){
+        var fileCreate = {
+            text: "新建文件",
+            func: function() {
+                var idfile = new Array();
+                idfile.push(this.id);
+                $("#fileCreate").click();
+                $("#file-create").find(".modal-sure").modalSure({
+                    id: idfile,
+                    mode: "file"
+                });
+            }
+        },  folderCreate = {
+            text: "新建文件夹",
+            func: function() {
+                var idfile = new Array();
+                idfile.push(this.id);
+                $("#folderCreate").click();
+                $("#folder-create").find(".modal-sure").modalSure({
+                    id: idfile,
+                    mode: "folder"
+                });
+            }
+        },  fileDelete = {
+            text: "删除",
+            func: function() {
+                var idfile = new Array();
+                idfile.push(this.id);
+                $("#fileDelete").click();
+                $("#file-delete").find(".modal-sure").modalSure({
+                    id: idfile
+                });
+            }
+        },  rename = {
+            text: "重命名",
+            func: function() {
+                var idfile = new Array();
+                idfile.push(this.id);
+                $("#reName").click();
+                $("#re-name").find(".modal-sure").modalSure({
+                    id: idfile,
+                    mode: "rename"
+                });
+            }
+        };
+
+        var rClickData1 = [
+            [fileCreate, folderCreate, fileDelete, rename]
+        ];
+        var rClickData2 = [
+            [fileDelete, rename]
+        ];
+        $(".tree-view-node").rClickMenu(rClickData1,{
+            name: "folder"
+        });
+        $(".tree-view-leaf").rClickMenu(rClickData2,{
+            name: "file"
+        });
+    };
+
 })(jQuery);
 
 /* ========================================================================
@@ -451,13 +579,14 @@
         },
 
         //为文件树添加事件：点击文件夹变化图片、下拉、收起内容
-        addListener: function(obj){
+        addListener: function(obj, objLeaf){
             var imgSrc = "img/icon/";
             var childText = $(".tree-font");
             //点击文件改变颜色
             childText.each(function(){
                 var child_text = $(this);
                 child_text.bind("click", function(){
+                    //点击变色
                     $(".tree-font").each(function(){
                        if($(this).hasClass("node-selected")){
                            $(this).removeClass("node-selected");
@@ -487,6 +616,29 @@
                     }
                 });
             });
+            //文件则添加tab
+            objLeaf.each(function(){
+                var ObjLeaf = $(this);
+                ObjLeaf.bind("click", function(){
+                    var leafName = $(this).find(".tree-font").text();
+                    var leafId = $(this).attr("id");
+                    //判断当前点击的文件是否存在
+                    //判断
+                    if($("#fileTab_"+leafId).length > 0){
+                        return false;
+                    }else{
+                        //显示tab
+                        $.fn.tab("tabItem",{
+                            id: leafId,
+                            filename: leafName
+                        });
+                        //加载对应的代码内容
+                        $.fn.codeText({
+                            codeId: "fileTab_"+leafId
+                        });
+                    }
+                });
+            });
         }
     };
 
@@ -500,6 +652,7 @@
         var defaults = {
             treeBox: null,
             treeViewNode: null,
+            treeViewLeaf: null,
             afterBuildTree: $.noop
         };
 
@@ -542,16 +695,42 @@
 
         //调用显示
         $("."+setting.treeBox).append(showTree(data));
-        tree.addListener($("."+setting.treeViewNode));
+        tree.addListener($("."+setting.treeViewNode), $("."+setting.treeViewLeaf));
 
-        //if($.isFunction(setting.showTree)){
-        //    setting.showTree.call(this);
-        //}
+        //右击事件监听添加
+        $.fn.rClickAddListener();
     };
     $.fn.tree.defaults = {
         dataSource: function(options, callback){}
     };
     $.fn.tree.Constructor = Tree;
+
+    //目录树刷新
+    $("#refresh").bind("click", function(){
+        //var fileTreeData = null;
+        //$.ajax({
+        //    type: "GET",
+        //    url: "http://121.42.27.129/file/dir",
+        //    dataType: "JSONP",
+        //    success: function(data){
+        //        console.log(data);
+        //        fileTreeData = eval("("+data+")");
+        //    }
+        //});
+        $(".tree-view").children().remove();
+        var fileTreeData = [
+            {id:0, pid:-1, type:"folder", name:"webIDE"},
+            {id:1, pid:0, type:"folder", name:"html"},
+            {id:2, pid:1, type:"file", name:"index.html"},
+            {id:3, pid:0, type:"folder", name:"js"},
+            {id:4, pid:0, type:"file", name:"style.css"}
+        ];
+        $.fn.tree(fileTreeData, {
+            treeBox: "tree-view",
+            treeViewNode: "tree-view-node",
+            treeViewLeaf: "tree-view-leaf"
+        });
+    });
 
     //递归方式需要传入的参数：
     //根目录的名字：rootName, 后台传回的树形目录数据结构：treeNodes
@@ -599,6 +778,23 @@
     */
 
 })(jQuery);
+
+/* ========================================================================
+ * webIDE:controller
+ * 线性文件目录模块
+ * ======================================================================== */
+(function($){
+    $.fn.fileLine = function(){
+
+        var inlineFile = {//线性文件类
+            addFile: function(){
+            },
+            removeFile: function(){
+            }
+        }
+    }
+})(jQuery);
+
 
 /* ========================================================================
  * webIDE:controller
